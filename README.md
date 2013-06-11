@@ -1,13 +1,13 @@
-# Transit Light Curve Analysis Routine -
-Allows the creation and analysis of transit light curves directly from FITS files
+# Transit Light Curve Analysis Pipeline
+Allows the creation and analysis of transiting exoplanet light curves directly from FITS files
 
 # This routine can:
-Perform Aperture photometry on FITS files
-Create basic light curves using calibration stars (and a super-calibrator)
-Calculate the radius, period, inclination angle, semi-major axis as well as the density and mass of the  exoplanet (providing stellar information is known and MpSin(i) from radial velocity measurements)
-Fit advanced models to the light curve and obtain transit midpoint time and luminosity dip
-Perform Monte-Carlo simulations
-Create an Observed-Calculated plot for the exoplanet (currently has to be done manually)
+* Perform aperture photometry on FITS files
+* Create basic light curves using calibration stars (and a super-calibrator)
+* Calculate the radius, period, inclination angle, semi-major axis as well as the density and mass of the  exoplanet (providing stellar information is known and MpSin(i) from radial velocity measurements)
+* Fit advanced models to the light curve and obtain transit midpoint time and luminosity dip
+* Perform Monte-Carlo Mandel-Agol limb darkening model fitting 
+* Create an Observed-Calculated plot for the exoplanet (currently has to be done manually)
 
 # Requirements:
 Python 2.7
