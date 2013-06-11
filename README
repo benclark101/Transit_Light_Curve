@@ -1,4 +1,4 @@
-#Transit Light Curve Analysis Package -
+#Transit Light Curve Analysis Routine -
 Allows the creation and analysis of transit light curves directly from FITS files
 
 #This routine can:
@@ -8,7 +8,6 @@ Calculate the radius, period, inclination angle, semi-major axis as well as the 
 Fit advanced models to the light curve and obtain transit midpoint time and luminosity dip
 Perform Monte-Carlo simulations
 Create an Observed-Calculated plot for the exoplanet (currently has to be done manually)
-
 
 #Requirements:
 Python 2.7
@@ -23,3 +22,4 @@ Download repository as a zip and extract it to a folder of your choice
 1. Edit “userinput.py” and enter the location of the FITS file you wish to analyse
 2. Enter host star properties in the same file
 3. Run “main.py” and follow instructions when prompted
+
