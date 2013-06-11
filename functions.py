@@ -1,7 +1,7 @@
 from userinput import *
 
 #AlignImages - A function that calculates the misalignment of a set of images in pixels up to +/- 50px
-#Only works in low stellar-populated  fields (becomes inaccurate if many stars in image)
+#Only works in low populated fields (becomes inaccurate if many stars in image)
 #Simply requires location of FITS file folder
 #Outputs an array to file of correction values in (x,y) pixels
 def AlignImages(fitsLoc):
@@ -135,7 +135,7 @@ def GetIntensity(fileName,a, corX, corY,bgX,bgY):
         fout.write("\n")
         fout.close
         
-#Aperture photometry error calculations
+#ErApPhotom - Performs aperture photometry for the error calculations (same as AperturePhotometry() above except the code calculates the standard deviation in the aperture too)
 def ErApPhotom(x, y, r, image):
     R_arr = numpy.ones((image.shape[0],image.shape[1]))
     R_arr = R_arr * 4000
