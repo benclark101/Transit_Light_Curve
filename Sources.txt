@@ -1,3 +1,6 @@
+#DELETE everything in this file and replace with a source list like the one below, with the target star (with the exoplanet)
+#as the first source and the calibration stars as the other 9 sources
+# Format of X,Y
 1113,794
 1131,575
 721,945
