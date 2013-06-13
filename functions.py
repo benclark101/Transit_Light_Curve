@@ -135,7 +135,12 @@ def GetIntensity(fileName,a, corX, corY,bgX,bgY):
         fout.write("\n")
         fout.close
         
+<<<<<<< HEAD
 #ErApPhotom - Performs aperture photometry for the error calculations (same as AperturePhotometry() above except the code calculates the standard deviation in the aperture too)
+=======
+#ErApPhotom - Aperture photometry for error calculations
+#same as AperturePhotometry() function above except this function also returns the standard deviation in the aperture
+>>>>>>> Minor Changes
 def ErApPhotom(x, y, r, image):
     R_arr = numpy.ones((image.shape[0],image.shape[1]))
     R_arr = R_arr * 4000
@@ -154,7 +159,8 @@ def ErApPhotom(x, y, r, image):
     Intensity = sourceCount
     return Intensity, SdCount
     
-#Error Calculations
+#Errors - Same as GetIntensity() function but with error calculations
+#Outputs error values to file
 def Errors(fileName,a,corX, corY,bgX,bgY):
     image  = pyfits.getdata(fileName,0)
     bg,erBg = ErApPhotom(bgX+corX,bgY+corY , rMax, image)
@@ -191,12 +197,15 @@ def Errors(fileName,a,corX, corY,bgX,bgY):
         fout.write("\n")
         fout.close        
         
-#Parameter Calculations
+#paramCalc - Calculates exoplanet parameters
+#Requires inputs from the Radius() function below as well as ingress and egress times
+#+++++ Need more accurate way of retrieving ingress and egress times +++++
+#Outputs an array containing: Impact Parameter, Period, Semi-Major Axis, Inclination Angle, Mass and Density
 def paramCalc(iS,iE,eS,eE,ratio,ErRatio, Rplanet, ErRplanet):
     #Constants
     G = 6.67E-11
     ExoParams = []
-    #Calculate tf and tt and Delta
+    #Calculate tf, tt and Delta
     ingressStart = float(iS) * 60
     ingressEnd = float(iE) *60
     egressStart = float(eS) * 60
@@ -239,8 +248,8 @@ def paramCalc(iS,iE,eS,eE,ratio,ErRatio, Rplanet, ErRplanet):
     print "Inclination Angle: ", inclD, " +/- ", ErIncl, "Degrees"
     ExoParams.append(incl)
     #Mass of planet
-    Mrv = 1.404 * 1.898E27
-    ErMrv = 0.099 * 1.898E27
+    #Mrv = 1.404 * 1.898E27
+    #ErMrv = 0.099 * 1.898E27
     Mass = Mrv / numpy.sin(incl)
     ErMass = Mass * numpy.sqrt((ErMrv/Mrv)**2 + (numpy.deg2rad(ErIncl)*numpy.cos(incl))**2 )
     MassJ = Mass / 1.898E27
@@ -258,6 +267,7 @@ def paramCalc(iS,iE,eS,eE,ratio,ErRatio, Rplanet, ErRplanet):
     #Exoparams: b, P, a, incl, mass, density
     return ExoParams
 
+#Radius - Calculates the radius of the exoplanet using the dip in luminoisity and radius of host star
 def Radius(mtop, mbot, stdtop, stdbot,Ttimes):
     DeltaF = mtop-mbot
     ErrDF = numpy.sqrt(numpy.square(stdtop*stdtop) + numpy.square(stdbot*stdbot))
@@ -265,9 +275,9 @@ def Radius(mtop, mbot, stdtop, stdbot,Ttimes):
     ErrFO = stdbot
     LumRatio = (DeltaF/Foff)
     ELumRatio = LumRatio * numpy.sqrt((ErrDF/DeltaF) + (ErrFO/Foff))
-    Rstar = 1.57 * 6.955E8
+    #Rstar = 1.57 * 6.955E8
     Rplanet = numpy.sqrt(LumRatio * (Rstar * Rstar))
-    ERstar = 0.07 * 6.955E8
+    #ERstar = 0.07 * 6.955E8
     ErrRP = Rplanet * numpy.sqrt(numpy.square(ELumRatio/LumRatio) + numpy.square(ERstar / Rstar))
     RplanJ = Rplanet / 71492000
     ERPj = ErrRP / 71492000
@@ -286,72 +296,12 @@ def Radius(mtop, mbot, stdtop, stdbot,Ttimes):
     ParamArray = paramCalc(TiA,TiB,TeA,TeB,LumRatio,ELumRatio,Rplanet,ErrRP)
     fout.write(str(ParamArray))
     return ParamArray
-    
+
+#find - Find matching time values between the data and model arrays    
 def find(j, intensity, i, FluxArr):  
     IntNew = []
     FluxNew = []
-    F = 0
-    for b in j:
-        a = 0
-        for c in i:
-            if b >= c - 0.1 and b<= c + 0.1:
-                IntNew.append(intensity[F])
-                FluxNew.append(FluxArr[a])
-                break
-            a = a + 1
-        F = F + 1
-    if len(IntNew) < FileNumb:
-        input( "WARNING - not all values matched - increase z in model")
-    IntNP = numpy.asarray(IntNew)
-    FlNP = numpy.asarray(FluxNew)
-    value = numpy.sum((IntNP - FlNP)**2)
-    return value
-         
-#Input equation I(r) as a function
-def inten(r,cn):
-    IrSum = 0
-    n = 1
-    a = float(cn[0] * (1-((1-(r*r))**0.25 )))
-    b = float(cn[1] * (1-((1-(r*r))**0.5 )))
-    c = float(cn[2] * (1-((1-(r*r))**0.75 )))
-    d = float(cn[3] * (1-((1-(r*r))**1 )))
-    IrSum = a + b + c + d
-    Ir = float((1. - IrSum) * 2. * r)
-    return Ir
-    
-#Define function for omega
-def omega(cn):
-    Omg = 0
-    coeffs = []
-    c0 = 1 - cn[0] - cn[1] - cn[2] - cn[3]
-    coeffs.append(c0)
-    for i in range(0,4):
-        coeffs.append(cn[i])
-    n = 0
-    for CN in coeffs:
-        a = float(CN) / float(n+4)
-        n = n + 1
-        Omg = Omg + a
-    return Omg
-
-#Convert z to time
-def z2t(tmid, Fullz):
-    TimeArray = []
-    P = PeriodVal
-    a = SemiMjrAxis
-    i = InclAngle
-    for z in Fullz:
-        if z > 0:
-            t = tmid + ( ((P*Rstar) / (2*3.1415926535*a)) * (z**2 - (numpy.cos(i))**2)**0.5)
-        if z < 0:
-            t = tmid + ( ((P*Rstar) / (2*3.1415926535*a)) * -(z**2 - (numpy.cos(i))**2)**0.5)
-        TimeArray.append(t)
-    return TimeArray
-
-def find(j, intensity, i, FluxArr):  
-    IntNew = []
-    FluxNew = []
-    accuracy = 1 #Accuracy to with which arrays are matched (in seconds)
+    accuracy = 0.1 #Accuracy to with which arrays are matched (in seconds)
     F = 0
     for b in j:
         a = 0
@@ -370,8 +320,50 @@ def find(j, intensity, i, FluxArr):
     value = numpy.sum((IntNP - FlNP)**2)
     return value
 
+         
+#inten - Intensity equation I(r) from Mandel & Agol 2002
+def inten(r,cn):
+    IrSum = 0
+    a = float(cn[0] * (1-((1-(r*r))**0.25 )))
+    b = float(cn[1] * (1-((1-(r*r))**0.5 )))
+    c = float(cn[2] * (1-((1-(r*r))**0.75 )))
+    d = float(cn[3] * (1-((1-(r*r))**1 )))
+    IrSum = a + b + c + d
+    Ir = float((1. - IrSum) * 2. * r)
+    return Ir
+    
+#omega - Omega equation from Mandel & Agol 2002
+def omega(cn):
+    Omg = 0
+    coeffs = []
+    c0 = 1 - cn[0] - cn[1] - cn[2] - cn[3]
+    coeffs.append(c0)
+    for i in range(0,4):
+        coeffs.append(cn[i])
+    n = 0
+    for CN in coeffs:
+        a = float(CN) / float(n+4)
+        n = n + 1
+        Omg = Omg + a
+    return Omg
 
-#Function that creates and fits model    
+#z2t - Convert from 'z' to time
+def z2t(tmid, Fullz):
+    TimeArray = []
+    P = PeriodVal
+    a = SemiMjrAxis
+    i = InclAngle
+    for z in Fullz:
+        if z > 0:
+            t = tmid + ( ((P*Rstar) / (2*3.1415926535*a)) * (z**2 - (numpy.cos(i))**2)**0.5)
+        if z < 0:
+            t = tmid + ( ((P*Rstar) / (2*3.1415926535*a)) * -(z**2 - (numpy.cos(i))**2)**0.5)
+        TimeArray.append(t)
+    return TimeArray
+
+
+
+#modelPlot - Function that creates and fits model    
 def modelPlot(zarr, intensity,IntenErrP, params, parameters):
     p = params[0]
     Tmid = params[1]

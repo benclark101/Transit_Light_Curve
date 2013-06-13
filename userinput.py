@@ -17,13 +17,15 @@ global rMax
 global pi
 global a
 global rsun
+global Mrv
+global ErMrv
 
 #--------------- VARIABLES ------------------
 fitsLoc = 'C:/Users/ben/Desktop/Project - 4th Year/20120101/'#location of fits files
-#Ensure that only fits files are in the folder given above!
+#Ensure that ONLY FITS FILES are in the folder given above!
 OutFolder = 'Output/' #Folder to Output data
+rMax = 14 #Desired aperture radius size
 #--------------Constants-----------------
-rMax = 14 #Aperture radius size
 pi = 3.14159265358979323846264338327 #pi
 a = 0
 rsun = 6.955E8 # In m
@@ -34,4 +36,7 @@ Mstar = 1.35 * 2E30 #in KG
 ErMstar = 0.14 * 2E30 #in KG
 Rstar = 1.57 * 6.955E8 # In m
 ErRstar = 0.07 * 6.955E8 # In m
+#----------Exoplanet Properties------------
+Mrv = 1.404 * 1.898E27
+ErMrv = 0.099 * 1.898E27
 
