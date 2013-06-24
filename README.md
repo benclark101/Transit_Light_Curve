@@ -20,7 +20,7 @@ The following libraries:
 * [matplotlib](http://matplotlib.org/)
 * [SciPy](http://www.scipy.org/)
 * random
-I recommend you download [PythonXY](https://code.google.com/p/pythonxy/)
+* I recommend you download [PythonXY](https://code.google.com/p/pythonxy/)
 
 # To install:
 Download repository as a zip and extract it to a folder of your choice
