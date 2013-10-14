@@ -135,12 +135,12 @@ def GetIntensity(fileName,a, corX, corY,bgX,bgY):
         fout.write("\n")
         fout.close
         
-<<<<<<< HEAD
+#<<<<<<< HEAD
 #ErApPhotom - Performs aperture photometry for the error calculations (same as AperturePhotometry() above except the code calculates the standard deviation in the aperture too)
-=======
+#=======
 #ErApPhotom - Aperture photometry for error calculations
 #same as AperturePhotometry() function above except this function also returns the standard deviation in the aperture
->>>>>>> Minor Changes
+#>>>>>>> Minor Changes
 def ErApPhotom(x, y, r, image):
     R_arr = numpy.ones((image.shape[0],image.shape[1]))
     R_arr = R_arr * 4000
