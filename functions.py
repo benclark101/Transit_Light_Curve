@@ -172,7 +172,7 @@ def Errors(fileName,a,corX, corY,bgX,bgY):
     hours = time[0]
     mins = time[1]
     secs = time[2]
-    MPM = (int(hours) * 60) + int(mins) + (int(secs)/60)
+    MPM = (int(hours) * 60) + int(mins) + (float(secs)/60)
     fout = open("error.txt", "a")  
     fout.write(str(MPM))
     fout.write(":")
